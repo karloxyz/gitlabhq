@@ -23,8 +23,11 @@ module Gitlab
       authors.size
     end
 
-    def contributors
+    def total_commits
       parse_log
+      total = Hash.new(0)
+      parse_log.each{ |entry| total[entry["date"]] += 1 }
+      total
     end
 
     def graph

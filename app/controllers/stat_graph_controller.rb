@@ -8,7 +8,7 @@ class StatGraphController < ProjectResourceController
   def show
   	@repo = @project.repository
     @stats = Gitlab::GitStats.new(@repo.raw, @repo.root_ref)
-    @display = @stats.contributors
+    @display = @stats.total_commits
   end
   
 end
