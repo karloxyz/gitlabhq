@@ -24,6 +24,9 @@ module Gitlab
     end
 
     def contributors
+      args = ['--format="%aN%aD', '--shortstat', '--no-merges']
+      log = repo.git.run(nil, 'log', nil, {}, args)
+      log
     end
 
     def graph
