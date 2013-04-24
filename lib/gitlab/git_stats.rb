@@ -23,6 +23,9 @@ module Gitlab
       authors.size
     end
 
+    def contributors
+    end
+
     def graph
       @graph ||= build_graph
     end
