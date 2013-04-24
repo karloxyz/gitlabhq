@@ -23,4 +23,5 @@
 //= require g.bar-min
 //= require branch-graph
 //= require ace-src-noconflict/ace
+//= require d3
 //= require_tree .
