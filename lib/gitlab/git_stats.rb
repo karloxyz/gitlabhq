@@ -24,9 +24,7 @@ module Gitlab
     end
 
     def contributors
-      args = ['--format="%aN%aD', '--shortstat', '--no-merges']
-      log = repo.git.run(nil, 'log', nil, {}, args)
-      log
+      parse_log
     end
 
     def graph
@@ -55,6 +53,42 @@ module Gitlab
       end
 
       authors.sort_by(&:commits).reverse
+    end
+
+    def get_log
+      args = ['--format=%aN%x0a%ad', '--date=short', '--shortstat', '--no-merges']
+      log = repo.git.run(nil, 'log', nil, {}, args)
+    end
+
+    #Parses the log file into a collection of commits
+    #Data model: {author, date, additions, deletions}
+    def parse_log
+      log = get_log.split("\n")
+
+      i = 0
+      collection = []
+      entry = {}
+
+      while i < log.size do
+        pos = i % 4
+        case pos
+        when 0 
+          unless i == 0
+            collection.push(entry)
+            entry = {}
+          end
+          entry["author"] = log[i]
+        when 1
+          entry["date"] = Date.parse log[i]
+        when 3
+          changes = log[i].split(",")
+          entry["additions"] = changes[1].to_i unless changes[1].nil?
+          entry["deletions"] = changes[2].to_i unless changes[2].nil?
+        end
+        i += 1
+      end
+
+      collection
     end
 
     def build_graph n = 4
