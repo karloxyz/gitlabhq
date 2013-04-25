@@ -1,7 +1,9 @@
+.tint-box#contributors-master
+
 :javascript
   var margin = {top: 20, right: 20, bottom: 30, left: 50},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    width = 1150 - margin.right - margin.left,
+    height = 175;
 
   var parseDate = d3.time.format("%Y-%m-%d").parse;
 
@@ -24,7 +26,7 @@
     .y0(height)
     .y1(function(d) { return y(d.close); });
 
-  var svg = d3.select("body").append("svg")
+  var svg = d3.select("#contributors-master").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
@@ -55,9 +57,3 @@
   svg.append("g")
     .attr("class", "y axis")
     .call(yAxis)
-  .append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("y", 6)
-    .attr("dy", ".71em")
-    .style("text-anchor", "end")
-    .text("Commits");
