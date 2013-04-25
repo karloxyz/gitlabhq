@@ -117,6 +117,9 @@ gem "redis-rails"
 # d3.js
 gem "d3_rails"
 
+# underscore.js
+gem "underscore-rails", "~> 1.4.4"
+
 group :assets do
   gem "sass-rails",   "~> 3.2.5"
   gem "coffee-rails", "~> 3.2.2"
