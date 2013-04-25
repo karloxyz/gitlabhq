@@ -8,13 +8,19 @@ class StatGraphController < ProjectResourceController
   def show
   	@repo = @project.repository
     @stats = Gitlab::GitStats.new(@repo.raw, @repo.root_ref)
+    @log = @stats.log
     @display = total_commits
   end
 
   def total_commits
-    log = @stats.log
     total = Hash.new(0)
-    log.each{ |entry| total[entry["date"]] += 1 }
+    @log.each{ |entry| total[entry["date"]] += 1 }
+    total.to_json
+  end
+
+  def commits_by_author(author)
+    total = Hash.new(0)
+    @log.each{ |entry| total[entry["date"]] += 1 if entry["author"] == author }
     total.to_json
   end
   
