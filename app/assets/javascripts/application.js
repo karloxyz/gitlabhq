@@ -25,4 +25,5 @@
 //= require ace-src-noconflict/ace
 //= require d3
 //= require underscore
+//= required stat_graph.js
 //= require_tree .
