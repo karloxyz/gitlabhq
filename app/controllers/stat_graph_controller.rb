@@ -8,7 +8,14 @@ class StatGraphController < ProjectResourceController
   def show
   	@repo = @project.repository
     @stats = Gitlab::GitStats.new(@repo.raw, @repo.root_ref)
-    @display = @stats.total_commits.to_json
+    @display = total_commits
+  end
+
+  def total_commits
+    log = @stats.log
+    total = Hash.new(0)
+    log.each{ |entry| total[entry["date"]] += 1 }
+    total.to_json
   end
   
 end
