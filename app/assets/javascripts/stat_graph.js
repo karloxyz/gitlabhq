@@ -1,8 +1,13 @@
 var Graphs = {}
-Graphs.draw_total_commit = function (data) {
-  var margin = {top: 20, right: 20, bottom: 30, left: 50},
-    width = 1150 - margin.right - margin.left,
-    height = 175;
+
+var x_bounds;
+var y_bounds;
+var margin = {top: 20, right: 20, bottom: 30, left: 50};
+var dates = [];
+
+Graphs.draw_total_commits = function (data) {
+  var width = 1150 - margin.right - margin.left,
+  height = 175;
 
   var parseDate = d3.time.format("%Y-%m-%d").parse;
 

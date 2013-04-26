@@ -1,4 +1,7 @@
-.tint-box#contributors-master
-
+%h3: Contributors
 :javascript
-  Graphs.draw_total_commit(#{@display});
+  Graphs.draw_total_commits(#{@display});
+  var authors = _.sortBy(#{@by_author}, function(d) { return d.total }, -1).reverse();
+  $.each(authors, function (key, value) {
+      Graphs.draw_contributors_commits(_.omit(value,'total'));
+  });
