@@ -77,13 +77,13 @@ module Gitlab
             collection.push(entry)
             entry = {}
           end
-          entry["author"] = log[i]
+          entry[:author] = log[i].to_s
         when 1
-          entry["date"] = Date.parse log[i]
+          entry[:date] = log[i].to_s
         when 3
           changes = log[i].split(",")
-          entry["additions"] = changes[1].to_i unless changes[1].nil?
-          entry["deletions"] = changes[2].to_i unless changes[2].nil?
+          entry[:additions] = changes[1].to_i unless changes[1].nil?
+          entry[:deletions] = changes[2].to_i unless changes[2].nil?
         end
         i += 1
       end
