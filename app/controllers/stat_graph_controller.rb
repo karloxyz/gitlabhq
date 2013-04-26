@@ -25,7 +25,6 @@ class StatGraphController < ProjectResourceController
       author = authors[entry[:author]] 
       author[entry[:date]] += 1 
       author[:total] += 1 }
-      
     authors.to_json
   end
   

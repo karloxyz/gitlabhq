@@ -14,3 +14,31 @@
   fill: #aaa;
   font-size: 10px;
 }
+
+#contributors .person {
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	float: left;
+	border-radius: 2px;
+	margin: 10px;
+	border: 1px solid #ddd;
+}
+
+.contributors-list {
+  margin: 0 0 10px 0;
+  list-style: none;
+  padding: 0;
+}
+
+#contributors .person .spark {
+  display: block;
+  background: #f7f7f7;
+}
+
+#contributors .person .area-contributor {
+  fill: #f17f49;
+}
+
+.clearfix {
+  display: block;
+}

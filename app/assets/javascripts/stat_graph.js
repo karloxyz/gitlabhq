@@ -6,8 +6,11 @@ var margin = {top: 20, right: 20, bottom: 30, left: 50};
 var dates = [];
 
 Graphs.draw_total_commits = function (data) {
-  var width = 1150 - margin.right - margin.left,
-  height = 175;
+
+  var margin = {top: 20, right: 20, bottom: 30, left: 50};
+
+  var width = 1100,
+  height = 125;
 
   var parseDate = d3.time.format("%Y-%m-%d").parse;
 
@@ -32,7 +35,7 @@ Graphs.draw_total_commits = function (data) {
     .y1(function(d) { return y(d.value); })
     .interpolate("basis");
 
-  var svg = d3.select(".content").append("svg")
+  var svg = d3.select("#contributors-master").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .attr("class", "tint-box")
@@ -69,7 +72,10 @@ Graphs.draw_total_commits = function (data) {
 }
 
 Graphs.draw_contributors_commits = function (data) {
-  var width = 448, 
+
+  var margin = {top: 20, right: 20, bottom: 30, left: 50};
+
+  var width = 490, 
   height = 130;
 
   var parseDate = d3.time.format("%Y-%m-%d").parse;
@@ -95,10 +101,10 @@ Graphs.draw_contributors_commits = function (data) {
     .y1(function(d) { return y(d.value); })
     .interpolate("basis");
 
-  var svg = d3.select(".content").append("svg")
+  var svg = d3.select( d3.selectAll(".person")[0].pop() ).append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
-    .attr("class", "tint-box")
+    .attr("class", "spark")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -122,7 +128,7 @@ Graphs.draw_contributors_commits = function (data) {
 
   svg.append("path")
     .datum(data)
-    .attr("class", "area")
+    .attr("class", "area-contributor")
     .attr("d", area);
 
   svg.append("g")

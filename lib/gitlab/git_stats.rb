@@ -62,7 +62,7 @@ module Gitlab
 
     #Parses the log file into a collection of commits
     #Data model: {author, date, additions, deletions}
-    def parse_log
+    def parse_log 
       log = get_log.split("\n")
 
       i = 0

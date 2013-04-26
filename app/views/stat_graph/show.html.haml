@@ -1,7 +1,17 @@
-%h3: Contributors
+.header.clearfix
+  %h3 September 4th 2011 - April 1st 2013
+  %p.info Commits to master, excluding merge commits
+
+.graphs
+  #contributors-master
+  #contributors.clearfix
+    %ol.contributors-list.clearfix
+
 :javascript
   Graphs.draw_total_commits(#{@display});
-  var authors = _.sortBy(#{@by_author}, function(d) { return d.total }, -1).reverse();
+  var authors = _.sortBy(#{@by_author}, function(d) { return d.total }).reverse();
+  console.log(authors);
   $.each(authors, function (key, value) {
+      $(".contributors-list").append("<li class='person' style='display: block;'><h3>Test</h3></li>");
       Graphs.draw_contributors_commits(_.omit(value,'total'));
   });
