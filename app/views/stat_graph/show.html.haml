@@ -1,5 +1,5 @@
 .header.clearfix
-  %h3 September 4th 2011 - April 1st 2013
+  %h3 September 4th 2011 - April 1st 2013(test)
   %p.info Commits to master, excluding merge commits
 
 .graphs
@@ -10,8 +10,7 @@
 :javascript
   Graphs.draw_total_commits(#{@display});
   var authors = _.sortBy(#{@by_author}, function(d) { return d.total }).reverse();
-  console.log(authors);
   $.each(authors, function (key, value) {
-      $(".contributors-list").append("<li class='person' style='display: block;'><h3>Test</h3></li>");
-      Graphs.draw_contributors_commits(_.omit(value,'total'));
+      $(".contributors-list").append("<li class='person' style='display: block;'><h4>" + this.author + " (" +  this.total + " commits)</h4></li>");
+    Graphs.draw_contributors_commits(_.omit(value,['author', 'total']));
   });

@@ -24,7 +24,9 @@ class StatGraphController < ProjectResourceController
     @log.each{ |entry| 
       author = authors[entry[:author]] 
       author[entry[:date]] += 1 
-      author[:total] += 1 }
+      author[:total] += 1
+      author[:author] = entry[:author]
+    }
     authors.to_json
   end
   
