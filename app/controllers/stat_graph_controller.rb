@@ -5,12 +5,20 @@ class StatGraphController < ProjectResourceController
   before_filter :authorize_code_access!
   before_filter :require_non_empty_project
 
+  respond_to :json, :html
+
   def show
   	@repo = @project.repository
     @stats = Gitlab::GitStats.new(@repo.raw, @repo.root_ref)
-    @log = @stats.log
+    if params[:to].nil? || params[:from].nil?
+      @log = @stats.log
+    else
+      options = {from: params[:from], to: params[:to]}
+      @log = @stats.log(options)
+    end
     @display = total_commits
     @by_author = commits_by_author
+    respond_with(@by_author);
   end
 
   def total_commits

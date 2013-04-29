@@ -48,7 +48,6 @@ Graphs.init_bounds = function (x, y, brush) {
   Graphs.set_bounds(x, y);
   Graphs.set_x_max_bounds(x);
   Graphs.change_date_header(brush);
-
 }
 
 Graphs.draw_total_commits = function (data) {
@@ -79,9 +78,29 @@ Graphs.draw_total_commits = function (data) {
 
   var brush = d3.svg.brush()
     .x(x)
-    .on("brushend", function () {
-      Graphs.change_date_header(brush);
+    .on("brushend", update_content);
+
+  function update_content() {
+    Graphs.change_date_header(brush);
+
+    var git_date_format = d3.time.format("%Y-%m-%d");
+    var bounds = brush.extent();
+    var from = git_date_format(bounds[0]);
+    var to = git_date_format(bounds[1]);
+
+    $.get(window.location, {
+      from: from,
+      to: to
+    })
+    .done( function (data) {
+      $(".contributors-list").html("");
+      var authors = _.sortBy(data, function(d) { return d.total }).reverse();
+      $.each(authors, function (key, value) {
+          $(".contributors-list").append("<li class='person' style='display: block;'><h4>" + this.author + " (" +  this.total + " commits)</h4></li>");
+        Graphs.draw_contributors_commits(_.omit(value,['author', 'total']));
+      });
     });
+  }
 
   var svg = d3.select("#contributors-master").append("svg")
     .attr("width", width + Graphs.margin.left + Graphs.margin.right)
@@ -92,7 +111,7 @@ Graphs.draw_total_commits = function (data) {
 
   data = d3.entries(data);
 
-  data.forEach(function(d) {
+  data.forEach(function (d) {
     Graphs.dates.push(d.key);
     d.key = Graphs.parseDate(d.key);
   });
@@ -134,7 +153,8 @@ Graphs.draw_contributors_commits = function (data) {
   height = 130;
 
   var x = d3.time.scale()
-    .range([0, width]);
+    .range([0, width])
+    .clamp(true);
 
   var y = d3.scale.linear()
     .range([height, 0])
@@ -193,4 +213,5 @@ Graphs.draw_contributors_commits = function (data) {
   svg.append("g")
     .attr("class", "y axis")
     .call(yAxis)
+
 }
