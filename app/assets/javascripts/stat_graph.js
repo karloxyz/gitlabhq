@@ -111,7 +111,7 @@ Graphs.create_contributors_list = function () {
 
   var authors = _.sortBy(Graphs.author_commits, function(d) { return d.total }).reverse();
   $.each(authors, function (key, value) {
-      $(".contributors-list").append("<li class='person' style='display: block;'><h4>" + this.author + "</h4><span class='commits'>" +
+    $(".contributors-list").append("<li class='person' style='display: block;'><h4>" + this.author + "</h4><span class='commits'>" +
         this.total + " commits</li>");
     Graphs.draw_contributors_commits(_.omit(value,['author','total']));
   }); 
