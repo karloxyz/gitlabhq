@@ -10,32 +10,18 @@ class StatGraphController < ProjectResourceController
   def show
   	@repo = @project.repository
     @stats = Gitlab::GitStats.new(@repo.raw, @repo.root_ref)
-    if params[:to].nil? || params[:from].nil?
-      @log = @stats.log
-    else
-      options = {from: params[:from], to: params[:to]}
-      @log = @stats.log(options)
-    end
-    @display = total_commits
-    @by_author = commits_by_author
-    respond_with(@by_author);
+    @log = @stats.log.to_json
   end
 
-  def total_commits
-    @total = Hash.new(0)
-    @log.each{ |entry| @total[entry[:date]] += 1 }
-    @total.to_json
-  end
-
-  def commits_by_author
-    authors = Hash.new {|h,k| h[k] = Hash.new(0)}
-    @log.each{ |entry| 
-      author = authors[entry[:author]] 
-      author[entry[:date]] += 1 
-      author[:total] += 1
-      author[:author] = entry[:author]
-    }
-    authors.to_json
-  end
+# def commits_by_author
+#    authors = Hash.new {|h,k| h[k] = Hash.new(0)}
+#    @log.each{ |entry| 
+#      author = authors[entry[:author]] 
+#      author[entry[:date]] += 1 
+#      author[:total] += 1
+#      author[:author] = entry[:author]
+#    }
+#    authors.to_json
+#  end
   
 end

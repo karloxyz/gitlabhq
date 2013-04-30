@@ -27,8 +27,8 @@ module Gitlab
       @graph ||= build_graph
     end
 
-    def log(options = {})
-      @log ||= parse_log(options)
+    def log
+      @log ||= parse_log
     end
 
     protected
@@ -55,19 +55,15 @@ module Gitlab
       authors.sort_by(&:commits).reverse
     end
 
-    def get_log(options = {})
+    def get_log
       args = ['--format=%aN%x0a%ad', '--date=short', '--shortstat', '--no-merges']
-      if !options[:from].nil? && !options[:to].nil?
-        args.push("--before=#{options[:to]}")
-        args.push("--after=#{options[:from]}")
-      end
       log = repo.git.run(nil, 'log', nil, {}, args)
     end
 
     #Parses the log file into a collection of commits
     #Data model: {author, date, additions, deletions}
-    def parse_log(options = {})
-      log = get_log(options).split("\n")
+    def parse_log
+      log = get_log.split("\n")
 
       i = 0
       collection = []

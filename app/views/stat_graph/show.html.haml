@@ -8,9 +8,8 @@
     %ol.contributors-list.clearfix
 
 :javascript
-  Graphs.draw_total_commits(#{@display});
-  var authors = _.sortBy(#{@by_author}, function(d) { return d.total }).reverse();
-  $.each(authors, function (key, value) {
-      $(".contributors-list").append("<li class='person' style='display: block;'><h4>" + this.author + "</h4></li>");
-    Graphs.draw_contributors_commits(_.omit(value,['author', 'total']));
-  });
+  Graphs.set_log(#{@log});
+  Graphs.parse_log();
+  Graphs.draw_total_commits();
+  Graphs.create_contributors_list();
+
