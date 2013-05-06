@@ -8,11 +8,15 @@ window.ContributorsStatGraphUtil =
     log = @get_stat_graph_log()
     for entry in log
       @total[entry.date] ?= {}
+      @total[entry.date].date ?= entry.date
       @by_author[entry.author] ?= {} 
+      @by_author[entry.author].author ?= entry.author
       @by_author[entry.author][entry.date] ?= {}
       @store_commits(entry)
       @store_additions(entry)
       @store_deletions(entry)
+    @total = _.toArray(@total)
+    @by_author = _.toArray(@by_author)
   store_commits: (entry) ->
     @total[entry.date].total = @by_author[entry.author][entry.date].total ?= 0
     @total[entry.date].total += 1

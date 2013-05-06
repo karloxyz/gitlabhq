@@ -32,23 +32,57 @@ describe("ContributorsStatGraphUtil", function () {
     ContributorsStatGraphUtil.parse_log();
 
     it("sets the correct information for the total collection", function () {
-      var CorrectTotal = {
-        "2013-04-21": 
+      var CorrectTotal = [
         {
+          date: "2013-04-21",
           total: 1,
           additions: 1,
           deletions: 1
-        }, 
-        "2013-04-20": 
+        },  
         {
+          date: "2013-04-20",
           total: 3,
           additions: 11,
           deletions: 11
         },
-        "2013-04-19": 
         {
+          date: "2013-04-19",
           total: 10,
           additions: 206,
+          deletions: 80
+        },
+        {
+          date: "2013-04-18",
+          total: 3,
+          additions: 19,
+          deletions: 16
+        }
+      ];
+      expect(ContributorsStatGraphUtil.total).toEqual(CorrectTotal);
+    });
+
+    it("sets the correct information for the by_author collection", function () {
+      var CorrectByAuthor = [
+      {
+        author: "Yves Senn",
+        "2013-04-21":
+        {
+          total: 1,
+          additions: 1,
+          deletions: 1
+        }
+      },
+      {
+        author: "Dmitriy Zaporozhets",
+        "2013-04-20":
+        {
+          total: 3,
+          additions: 11, deletions: 11
+        },
+        "2013-04-19":
+        {
+          total: 10, 
+          additions: 206, 
           deletions: 80
         },
         "2013-04-18":
@@ -57,42 +91,8 @@ describe("ContributorsStatGraphUtil", function () {
           additions: 19,
           deletions: 16
         }
-      };
-      expect(ContributorsStatGraphUtil.total).toEqual(CorrectTotal);
-    });
-
-    it("sets the correct information for the by_author collection", function () {
-      var CorrectByAuthor = {
-        "Yves Senn":
-        {
-          "2013-04-21":
-          {
-            total: 1,
-            additions: 1,
-            deletions: 1
-          }
-        },
-        "Dmitriy Zaporozhets":
-        {
-          "2013-04-20":
-          {
-            total: 3,
-            additions: 11, deletions: 11
-          },
-          "2013-04-19":
-          {
-            total: 10, 
-            additions: 206, 
-            deletions: 80
-          },
-          "2013-04-18":
-          {
-            total: 3,
-            additions: 19,
-            deletions: 16
-          }
-        }
-      };
+      }
+      ];
       expect(ContributorsStatGraphUtil.by_author).toEqual(CorrectByAuthor);
     });
 
