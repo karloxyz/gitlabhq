@@ -25,3 +25,7 @@ guard 'spinach' do
     "features/#{m[1]}#{m[2]}.feature"
   end
 end
+
+guard 'coffeescript', :output => 'spec/javascripts/compiled' do
+  watch(/^spec/javascripts/(.*).coffee/)
+end
