@@ -27,3 +27,5 @@
 //= require underscore
 //= required stat_graph.js
 //= require_tree .
+//= require backbone-rails
+

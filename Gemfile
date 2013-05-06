@@ -120,6 +120,12 @@ gem "d3_rails"
 # underscore.js
 gem "underscore-rails", "~> 1.4.4"
 
+#backbone.js
+gem "backbone-rails", "~> 0.9.10"
+
+#jasmine
+gem "jasmine"
+
 group :assets do
   gem "sass-rails",   "~> 3.2.5"
   gem "coffee-rails", "~> 3.2.2"
