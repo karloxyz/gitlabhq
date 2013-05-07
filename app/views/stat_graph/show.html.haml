@@ -12,8 +12,13 @@
     %ol.contributors-list.clearfix
 
 :javascript
-  Graphs.set_log(#{@log});
-  Graphs.parse_log();
-  Graphs.draw_total_commits();
-  Graphs.create_contributors_list();
+  var parsed_log = ContributorsStatGraphUtil.parse_log(#{@log});
+  var master_graph = new ContributorsMasterGraph;
+  var total_commits = ContributorsStatGraphUtil.get_data(parsed_log, 'total');
+  master_graph.draw(total_commits);
 
+  $("select").change( function () {
+    var field = $(this).val();
+    var data = ContributorsStatGraphUtil.get_data(parsed_log, field);
+    master_graph.redraw(data);
+  })
