@@ -1,11 +1,9 @@
 window.ContributorsStatGraphUtil =
-  log: {}
   total: {}
   by_author: {}
   get_stat_graph_log: ->
     StatGraph.get_log()
-  parse_log: ->
-    log = @get_stat_graph_log()
+  parse_log: (log) ->
     for entry in log
       @total[entry.date] ?= {}
       @total[entry.date].date ?= entry.date
@@ -17,6 +15,7 @@ window.ContributorsStatGraphUtil =
       @store_deletions(entry)
     @total = _.toArray(@total)
     @by_author = _.toArray(@by_author)
+    total: @total, by_author: @by_author
   store_commits: (entry) ->
     @total[entry.date].total = @by_author[entry.author][entry.date].total ?= 0
     @total[entry.date].total += 1
@@ -31,3 +30,12 @@ window.ContributorsStatGraphUtil =
     if entry.deletions?
       @total[entry.date].deletions += entry.deletions
       @by_author[entry.author][entry.date].deletions += entry.deletions
+  get_data: (parsed_log, field) ->
+    log = parsed_log.total
+    total_commits = []
+    _.each(log, (d) ->
+      total_commits.push(_.pick(d, [field, 'date']))
+    )
+    _.sortBy(total_commits, (d) ->
+      d.date
+    )

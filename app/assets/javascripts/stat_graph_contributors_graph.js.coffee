@@ -1,4 +1,4 @@
-window.graph = class ContributorsGraph
+class ContributorsGraph
   MARGIN:
     top: 20
     right: 20 
@@ -31,7 +31,7 @@ window.graph = class ContributorsGraph
     @svg.append("g").attr("class", "y axis").call(@y_axis)
 
 
-class ContributorsMasterGraph extends ContributorsGraph
+class window.ContributorsMasterGraph extends ContributorsGraph
   constructor: ->
     @width = 1100
     @height = 125
