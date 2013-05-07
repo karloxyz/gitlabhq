@@ -13,12 +13,24 @@
 
 :javascript
   var parsed_log = ContributorsStatGraphUtil.parse_log(#{@log});
-  var master_graph = new ContributorsMasterGraph;
-  var total_commits = ContributorsStatGraphUtil.get_data(parsed_log, 'total');
-  master_graph.draw(total_commits);
+  var total_commits = ContributorsStatGraphUtil.get_total_data(parsed_log, 'total');  
+  var master_graph = new ContributorsMasterGraph(total_commits);
+  master_graph.draw();
+
+  var author_commits = ContributorsStatGraphUtil.get_author_data(parsed_log, 'total');
+  var authors = [];
+  _.each(author_commits, function (d){
+    var author_graph = new ContributorsAuthorGraph(d.dates);
+    authors[d.author] = author_graph;
+    author_graph.draw();
+  });
 
   $("select").change( function () {
     var field = $(this).val();
-    var data = ContributorsStatGraphUtil.get_data(parsed_log, field);
+    var data = ContributorsStatGraphUtil.get_total_data(parsed_log, field);
+    var author_commits = ContributorsStatGraphUtil.get_author_data(parsed_log, field);
     master_graph.redraw(data);
+    _.each(author_commits, function (d){
+      authors[d.author].redraw(d.dates);
+    })
   })

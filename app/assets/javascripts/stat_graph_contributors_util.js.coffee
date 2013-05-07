@@ -10,6 +10,7 @@ window.ContributorsStatGraphUtil =
       @by_author[entry.author] ?= {} 
       @by_author[entry.author].author ?= entry.author
       @by_author[entry.author][entry.date] ?= {}
+      @by_author[entry.author][entry.date].date ?= entry.date
       @store_commits(entry)
       @store_additions(entry)
       @store_deletions(entry)
@@ -30,12 +31,33 @@ window.ContributorsStatGraphUtil =
     if entry.deletions?
       @total[entry.date].deletions += entry.deletions
       @by_author[entry.author][entry.date].deletions += entry.deletions
-  get_data: (parsed_log, field) ->
+  get_total_data: (parsed_log, field) ->
     log = parsed_log.total
-    total_commits = []
+    total_data = []
     _.each(log, (d) ->
-      total_commits.push(_.pick(d, [field, 'date']))
+      total_data.push(_.pick(d, [field, 'date']))
     )
-    _.sortBy(total_commits, (d) ->
+    _.sortBy(total_data, (d) ->
       d.date
     )
+  get_author_data: (parsed_log, field) ->
+    log = parsed_log.by_author
+    author_data = []
+    _.each(log, (d) ->
+      push = {}
+      push.author = d.author
+      push.dates = []
+      push.total = 0
+      _.each(_.omit(d, 'author'), (value, key) ->
+        push.total += value[field]
+        push.dates.push(_.pick(value, [field, 'date']))
+      )
+      push.dates = _.sortBy(push.dates, (d) ->
+        d.date
+      )
+      author_data.push(push)
+    )
+
+    _.sortBy(author_data, (d) ->
+      d.total
+    ).reverse()
