@@ -46,14 +46,11 @@ window.ContributorsStatGraphUtil =
     _.each(log, (d) ->
       push = {}
       push.author = d.author
-      push.dates = []
+      push.dates = {}
       push.total = 0
       _.each(_.omit(d, 'author'), (value, key) ->
         push.total += value[field]
-        push.dates.push(_.pick(value, [field, 'date']))
-      )
-      push.dates = _.sortBy(push.dates, (d) ->
-        d.date
+        push.dates[value.date] = value[field]
       )
       author_data.push(push)
     )

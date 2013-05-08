@@ -20,6 +20,8 @@
   var author_commits = ContributorsStatGraphUtil.get_author_data(parsed_log, 'total');
   var authors = [];
   _.each(author_commits, function (d){
+    $(".contributors-list").append("<li class='person' style='display: block;'><h4>" + d.author + "</h4><span class='commits'>" +
+    d.total + " commits</li>");
     var author_graph = new ContributorsAuthorGraph(d.dates);
     authors[d.author] = author_graph;
     author_graph.draw();

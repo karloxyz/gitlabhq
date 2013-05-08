@@ -41,8 +41,8 @@ class window.ContributorsMasterGraph extends ContributorsGraph
     parseDate = d3.time.format("%Y-%m-%d").parse
     dates = []
     data.forEach((d) ->
-      d.date = parseDate(d.date)
       dates.push(d.date)
+      d.date = parseDate(d.date)
     )
     ContributorsGraph.set_dates(dates)
   create_scale: ->
@@ -103,11 +103,6 @@ class window.ContributorsAuthorGraph extends ContributorsGraph
     @y_axis = null
     @area = null
     @svg = null
-  process_dates: (data) ->
-    parseDate = d3.time.format("%Y-%m-%d").parse
-    data.forEach((d) ->
-      d.date = parseDate(d.date)
-    )
   create_scale: ->
     super @width, @height
   create_axes: ->
@@ -118,12 +113,14 @@ class window.ContributorsAuthorGraph extends ContributorsGraph
     @y.domain(@y_domain)
   create_area: (x, y) ->
     @area = d3.svg.area().x((d) ->
-      x(d.date)
-    ).y0(@height).y1((d) ->
-      y(d.total = d.total ? d.additions ? d.deletions)
+      parseDate = d3.time.format("%Y-%m-%d").parse
+      x(parseDate(d))
+    ).y0(@height).y1((d) =>
+      if @data[d]? then y(@data[d]) else y(0)
     ).interpolate("basis")
   create_svg: ->
-    @svg = d3.select("body").append("svg")
+    list_item = d3.selectAll(".person")[0].pop()
+    @svg = d3.select(list_item).append("svg")
     .attr("width", @width + @MARGIN.left + @MARGIN.right)
     .attr("height", @height + @MARGIN.top + @MARGIN.bottom)
     .attr("class", "spark")
@@ -131,19 +128,20 @@ class window.ContributorsAuthorGraph extends ContributorsGraph
     .attr("transform", "translate(" + @MARGIN.left + "," + @MARGIN.top + ")")
   draw_path: (data) ->
     @svg.append("path").datum(data).attr("class", "area-contributor").attr("d", @area);
-  draw: =>
-    @process_dates(@data)
+  set_data: (data) ->
+    @data = data
+  draw: ->
     @create_scale()
     @create_axes()
     @set_domain()
     @create_area(@x, @y)
     @create_svg()
-    @draw_path(@data)
+    @draw_path(@dates)
     @draw_x_axis()
     @draw_y_axis()
-  redraw: (data) =>
-    @process_dates(data)
+  redraw: (data) ->
     @set_domain()
-    @svg.select("path").datum(data)
+    @set_data(data)
+    @svg.select("path").datum(@dates)
     @svg.select("path").attr("d", @area)
     @svg.select(".y.axis").call(@y_axis)
