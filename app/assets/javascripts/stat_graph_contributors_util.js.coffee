@@ -40,7 +40,7 @@ window.ContributorsStatGraphUtil =
     _.sortBy(total_data, (d) ->
       d.date
     )
-  get_author_data: (parsed_log, field) ->
+  get_author_data: (parsed_log, field, date_range = null) ->
     log = parsed_log.by_author
     author_data = []
     _.each(log, (d) ->
@@ -49,10 +49,15 @@ window.ContributorsStatGraphUtil =
       push.dates = {}
       push.total = 0
       _.each(_.omit(d, 'author'), (value, key) ->
-        push.total += value[field]
-        push.dates[value.date] = value[field]
+        if date_range is null
+          push.dates[value.date] = value[field]
+          push.total += value[field]
+        else if date_range[0] <= new Date(value.date) <= date_range[1]
+          push.dates[value.date] = value[field]
+          push.total += value[field]
       )
-      author_data.push(push)
+      if not jQuery.isEmptyObject(push.dates)
+        author_data.push(push)
     )
 
     _.sortBy(author_data, (d) ->

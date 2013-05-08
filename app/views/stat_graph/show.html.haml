@@ -1,10 +1,11 @@
 .header.clearfix
   .right
     %select
-      %option{:value=> "total"} Commits
-      %option{:value=> "additions"} Additions
-      %option{:value=> "deletions"} Deletions
+      %option{:value => "total"} Commits
+      %option{:value => "additions"} Additions
+      %option{:value => "deletions"} Deletions
   %h3#date_header
+  %input#brush_change{:type => "hidden"}
 
 .graphs
   #contributors-master
@@ -17,6 +18,8 @@
   var master_graph = new ContributorsMasterGraph(total_commits);
   master_graph.draw();
 
+  var field = "total"
+
   var author_commits = ContributorsStatGraphUtil.get_author_data(parsed_log, 'total');
   var authors = [];
   _.each(author_commits, function (d){
@@ -28,11 +31,33 @@
   });
 
   $("select").change( function () {
-    var field = $(this).val();
+    field = $(this).val();
     var data = ContributorsStatGraphUtil.get_total_data(parsed_log, field);
     var author_commits = ContributorsStatGraphUtil.get_author_data(parsed_log, field);
-    master_graph.redraw(data);
+    master_graph.set_data(data);
+    master_graph.redraw();
     _.each(author_commits, function (d){
-      authors[d.author].redraw(d.dates);
+      authors[d.author].set_data(d.dates);
+      authors[d.author].redraw();
     })
   })
+
+  $("#brush_change").change( function (){
+    var x_domain = ContributorsGraph.prototype.x_domain;
+    change_date_header(x_domain)
+    var author_commits = ContributorsStatGraphUtil.get_author_data(parsed_log, field, x_domain);
+    $("ol").html("");
+    _.each(author_commits, function (d){
+      $(authors[d.author].list_item).appendTo("ol");
+      authors[d.author].set_data(d.dates);
+      authors[d.author].redraw();
+    })
+  })
+
+  function change_date_header (x_domain) {
+    var print_date_format = d3.time.format("%B %e %Y");
+    var x_domain = ContributorsGraph.prototype.x_domain;
+    var print = print_date_format(x_domain[0]) + " - " + print_date_format(x_domain[1]);
+    $("#date_header").text(print);
+  }
+
