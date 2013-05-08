@@ -44,7 +44,6 @@ class window.ContributorsGraph
   set_data: (data) ->
     @data = data
 
-
 class window.ContributorsMasterGraph extends ContributorsGraph
   constructor: (@data) ->
     @width = 1100
