@@ -47,19 +47,23 @@ window.ContributorsStatGraphUtil =
       push = {}
       push.author = d.author
       push.dates = {}
-      push.total = 0
+      push.total = push.additions = push.deletions = 0
       _.each(_.omit(d, 'author'), (value, key) ->
         if date_range is null
           push.dates[value.date] = value[field]
-          push.total += value[field]
+          push.total += value.total
+          push.additions += value.additions
+          push.deletions += value.deletions
         else if date_range[0] <= new Date(value.date) <= date_range[1]
           push.dates[value.date] = value[field]
-          push.total += value[field]
+          push.total += value.total
+          push.additions += value.additions
+          push.deletions += value.deletions
       )
       if not jQuery.isEmptyObject(push.dates)
         author_data.push(push)
     )
 
     _.sortBy(author_data, (d) ->
-      d.total
+      d[field]
     ).reverse()
